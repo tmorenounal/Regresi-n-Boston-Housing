@@ -45,20 +45,33 @@ def main():
         model = load_model()
         scaler = load_scaler()
         
+        st.write("Modelo cargado:", model)
+        st.write("Escalador cargado:", scaler)
+
         if model is not None:
             try:
                 # Convertir a numpy array
                 features_array = np.array(inputs).reshape(1, -1)
+                st.write("Valores de entrada sin escalar:", features_array)
                 
                 # Aplicar escalado si es necesario
                 if scaler:
                     features_array = scaler.transform(features_array)
-                
+                    st.write("Valores escalados:", features_array)
+
                 # Realizar la predicción
                 prediction = model.predict(features_array)
                 
                 # Mostrar el resultado
                 st.success(f"El precio predicho de la casa es: ${prediction[0]:,.2f}")
+
+                # Prueba de predicción con datos de prueba
+                test_input = np.array([[0.1, 25, 5, 0, 0.5, 6, 60, 3, 1, 300, 15, 400, 10]]).reshape(1, -1)
+                if scaler:
+                    test_input = scaler.transform(test_input)
+                test_prediction = model.predict(test_input)
+                st.write("Predicción con valores de prueba:", test_prediction)
+
             except Exception as e:
                 st.error(f"Error al realizar la predicción: {e}")
 
