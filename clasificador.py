@@ -2,6 +2,7 @@ import streamlit as st
 import pickle
 import gzip
 import numpy as np
+from sklearn.preprocessing import StandardScaler
 
 def load_model():
     """Carga el modelo desde un archivo comprimido."""
@@ -40,6 +41,11 @@ def main():
             try:
                 # Convertir a numpy array y reformatear para la predicción
                 features_array = np.array(inputs).reshape(1, -1)
+                
+                # Escalar los datos si el modelo usa un StandardScaler
+                if hasattr(model, 'steps'):
+                    scaler = model.named_steps['scaler']
+                    features_array = scaler.transform(features_array)
                 
                 # Realizar la predicción
                 prediction = model.predict(features_array)
