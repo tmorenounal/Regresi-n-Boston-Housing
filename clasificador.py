@@ -27,19 +27,31 @@ def main():
     st.title("Predicción de Precios de Viviendas en Boston")
     st.write("Introduce las características de la casa para predecir su precio.")
 
-    # Definir nombres de características
+    # Definir nombres y valores por defecto de las características
     feature_names = [
-        "Tasa de criminalidad (CRIM)", "Proporción de terrenos residenciales (ZN)",
-        "Proporción de acres de negocios (INDUS)", "Variable ficticia Charles River (CHAS)",
-        "Concentración de óxidos de nitrógeno (NOX)", "Número promedio de habitaciones (RM)",
-        "Proporción de unidades antiguas (AGE)", "Distancia a centros de empleo (DIS)",
-        "Índice de accesibilidad a autopistas (RAD)", "Tasa de impuesto a la propiedad (TAX)",
-        "Proporción alumno-maestro (PTRATIO)", "Índice de población afroamericana (B)",
-        "Porcentaje de población de estatus bajo (LSTAT)"
+        ("Tasa de criminalidad (CRIM)", 0.1),
+        ("Proporción de terrenos residenciales (ZN)", 25.0),
+        ("Proporción de acres de negocios (INDUS)", 5.0),
+        ("Variable ficticia Charles River (CHAS)", 0),  # Debe ser entero
+        ("Concentración de óxidos de nitrógeno (NOX)", 0.5),
+        ("Número promedio de habitaciones (RM)", 6.0),
+        ("Proporción de unidades antiguas (AGE)", 60.0),
+        ("Distancia a centros de empleo (DIS)", 3.0),
+        ("Índice de accesibilidad a autopistas (RAD)", 1),
+        ("Tasa de impuesto a la propiedad (TAX)", 300.0),
+        ("Proporción alumno-maestro (PTRATIO)", 15.0),
+        ("Índice de población afroamericana (B)", 400.0),
+        ("Porcentaje de población de estatus bajo (LSTAT)", 10.0)
     ]
     
-    # Crear entradas
-    inputs = [st.number_input(f"{feature}", min_value=0.0, format="%.4f") for feature in feature_names]
+    # Crear entradas con valores por defecto
+    inputs = []
+    for feature, default in feature_names:
+        if feature == "Variable ficticia Charles River (CHAS)":
+            value = st.radio(feature, [0, 1], index=default)  # Asegurar que sea int
+        else:
+            value = st.number_input(feature, min_value=0.0, value=default, format="%.4f")
+        inputs.append(value)
     
     if st.button("Predecir Precio"):
         model = load_model()
@@ -50,8 +62,9 @@ def main():
 
         if model is not None:
             try:
-                # Convertir a numpy array
+                # Convertir a numpy array y asegurarse de que CHAS y RAD sean enteros
                 features_array = np.array(inputs).reshape(1, -1)
+                features_array[:, [3, 8]] = features_array[:, [3, 8]].astype(int)  # CHAS y RAD deben ser enteros
                 st.write("Valores de entrada sin escalar:", features_array)
                 
                 # Aplicar escalado si es necesario
