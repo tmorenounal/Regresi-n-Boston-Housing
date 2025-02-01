@@ -44,46 +44,34 @@ def main():
         ("Porcentaje de población de estatus bajo (LSTAT)", 10.0)
     ]
     
-    # Crear entradas con valores por defecto
+    # Crear entradas con valores por defecto corregidos
     inputs = []
     for feature, default in feature_names:
         if feature == "Variable ficticia Charles River (CHAS)":
-            value = st.radio(feature, [0, 1], index=default)  # Asegurar que sea int
+            value = st.radio(feature, [0, 1], index=int(default))  # Asegurar que sea int
         else:
-            value = st.number_input(feature, min_value=0.0, value=default, format="%.4f")
+            value = st.number_input(feature, min_value=0.0, value=float(default), format="%.4f")
         inputs.append(value)
     
     if st.button("Predecir Precio"):
         model = load_model()
         scaler = load_scaler()
-        
-        st.write("Modelo cargado:", model)
-        st.write("Escalador cargado:", scaler)
 
         if model is not None:
             try:
                 # Convertir a numpy array y asegurarse de que CHAS y RAD sean enteros
                 features_array = np.array(inputs).reshape(1, -1)
                 features_array[:, [3, 8]] = features_array[:, [3, 8]].astype(int)  # CHAS y RAD deben ser enteros
-                st.write("Valores de entrada sin escalar:", features_array)
                 
                 # Aplicar escalado si es necesario
                 if scaler:
                     features_array = scaler.transform(features_array)
-                    st.write("Valores escalados:", features_array)
 
                 # Realizar la predicción
                 prediction = model.predict(features_array)
                 
                 # Mostrar el resultado
                 st.success(f"El precio predicho de la casa es: ${prediction[0]:,.2f}")
-
-                # Prueba de predicción con datos de prueba
-                test_input = np.array([[0.1, 25, 5, 0, 0.5, 6, 60, 3, 1, 300, 15, 400, 10]]).reshape(1, -1)
-                if scaler:
-                    test_input = scaler.transform(test_input)
-                test_prediction = model.predict(test_input)
-                st.write("Predicción con valores de prueba:", test_prediction)
 
             except Exception as e:
                 st.error(f"Error al realizar la predicción: {e}")
