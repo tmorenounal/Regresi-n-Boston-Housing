@@ -24,8 +24,28 @@ def load_scaler():
         return None
 
 def main():
-    st.title("Predicción de Precios de Viviendas en Boston")
+    st.title("🏡 Predicción de Precios de Viviendas en Boston")
     st.write("Introduce las características de la casa para predecir su precio.")
+
+    # Sección de explicación sobre la selección del modelo
+    st.subheader("📌 Elección del Mejor Modelo")
+    st.markdown("""
+    El modelo seleccionado para esta tarea es **Kernel Ridge Regression (KRR)** con los siguientes hiperparámetros:
+
+    - **alpha:** 0.1  
+    - **kernel:** rbf (Radial Basis Function)
+
+    ### 🎯 ¿Por qué este modelo?
+    - Se probaron varios modelos como **Regresión Lineal, Random Forest y SVR**.
+    - **KRR con kernel RBF** logró el **menor error cuadrático medio (MSE)** en validación.
+    - **Ventajas:**
+      - Mayor flexibilidad que la regresión lineal.
+      - Evita el sobreajuste que presentaba SVR.
+      - Se adapta bien a datos no lineales.
+    - **Optimización:** Se utilizó `GridSearchCV` para encontrar los mejores hiperparámetros.
+
+    **Este modelo ha demostrado ser el más preciso en la predicción de precios de viviendas en Boston.**
+    """)
 
     # Definir nombres y valores por defecto de las características
     feature_names = [
@@ -53,7 +73,7 @@ def main():
             value = st.number_input(feature, min_value=0.0, value=float(default), format="%.4f")
         inputs.append(value)
     
-    if st.button("Predecir Precio"):
+    if st.button("🔍 Predecir Precio"):
         model = load_model()
         scaler = load_scaler()
 
@@ -71,10 +91,10 @@ def main():
                 prediction = model.predict(features_array)
                 
                 # Mostrar el resultado
-                st.success(f"El precio predicho de la casa es: ${prediction[0]:,.2f}")
+                st.success(f"💰 El precio predicho de la casa es: **${prediction[0]:,.2f}**")
 
             except Exception as e:
-                st.error(f"Error al realizar la predicción: {e}")
+                st.error(f"❌ Error al realizar la predicción: {e}")
 
 if __name__ == "__main__":
     main()
