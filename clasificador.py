@@ -23,7 +23,9 @@ def load_scaler():
     except Exception:
         return None
 
-
+def main():
+    st.title("Predicción de Precios de Viviendas en Boston")
+    st.write("Introduce las características de la casa para predecir su precio.")
 
     # Sección de explicación sobre la selección del modelo
     st.subheader("Elección del Mejor Modelo")
@@ -36,9 +38,7 @@ def load_scaler():
     Ademas este modelo evita el sobreajuste que presentaba SVR y se adapta bien a datos no lineales. Se utilizó `GridSearchCV` para encontrar los mejores hiperparámetros.
     **Este modelo es más preciso en la predicción de precios de viviendas en Boston.**
     """)
-def main():
-    st.title("Predicción de Precios de Viviendas en Boston")
-    st.write("Introduce las características de la casa para predecir su precio.")
+
 
     # Definir nombres y valores por defecto de las características
     feature_names = [
