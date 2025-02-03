@@ -44,7 +44,6 @@ def main():
         ("Tasa de criminalidad (CRIM)", 0.1),
         ("Proporción de terrenos residenciales (ZN)", 25.0),
         ("Proporción de acres de negocios (INDUS)", 5.0),
-        ("Variable ficticia Charles River (CHAS)", 0),  # Debe ser entero
         ("Concentración de óxidos de nitrógeno (NOX)", 0.5),
         ("Número promedio de habitaciones (RM)", 6.0),
         ("Proporción de unidades antiguas (AGE)", 60.0),
