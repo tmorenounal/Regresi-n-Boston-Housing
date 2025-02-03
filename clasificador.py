@@ -5,7 +5,6 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 def load_model():
-    """Carga el modelo desde un archivo comprimido y verifica su integridad."""
     try:
         with gzip.open('model_trained_regressor.pkl.gz', 'rb') as f:
             model = pickle.load(f)
@@ -38,6 +37,8 @@ def main():
     Ademas este modelo evita el sobreajuste que presentaba SVR y se adapta bien a datos no lineales. Se utilizó `GridSearchCV` para encontrar los mejores hiperparámetros.
     **Este modelo es más preciso en la predicción de precios de viviendas en Boston.**
     """)
+
+    """Carga el modelo desde un archivo comprimido y verifica su integridad."""
 
     # Definir nombres y valores por defecto de las características
     feature_names = [
